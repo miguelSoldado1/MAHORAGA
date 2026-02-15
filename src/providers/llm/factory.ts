@@ -51,6 +51,7 @@ export function createLLMProvider(env: Env): LLMProvider | null {
       if (env.GOOGLE_GENERATIVE_AI_API_KEY) apiKeys.google = env.GOOGLE_GENERATIVE_AI_API_KEY;
       if (env.XAI_API_KEY) apiKeys.xai = env.XAI_API_KEY;
       if (env.DEEPSEEK_API_KEY) apiKeys.deepseek = env.DEEPSEEK_API_KEY;
+      if (env.GROQ_API_KEY) apiKeys.groq = env.GROQ_API_KEY;
 
       if (Object.keys(apiKeys).length === 0) {
         console.warn("LLM_PROVIDER=ai-sdk requires at least one provider API key");
@@ -100,7 +101,8 @@ export function isLLMConfigured(env: Env): boolean {
         env.ANTHROPIC_API_KEY ||
         env.GOOGLE_GENERATIVE_AI_API_KEY ||
         env.XAI_API_KEY ||
-        env.DEEPSEEK_API_KEY
+        env.DEEPSEEK_API_KEY ||
+        env.GROQ_API_KEY
       );
     default:
       return !!env.OPENAI_API_KEY;
@@ -117,5 +119,6 @@ export function getConfiguredProviders(env: Env): SupportedProvider[] {
   if (env.GOOGLE_GENERATIVE_AI_API_KEY) configured.push("google");
   if (env.XAI_API_KEY) configured.push("xai");
   if (env.DEEPSEEK_API_KEY) configured.push("deepseek");
+  if (env.GROQ_API_KEY) configured.push("groq");
   return configured;
 }

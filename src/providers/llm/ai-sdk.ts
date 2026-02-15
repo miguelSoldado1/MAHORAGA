@@ -1,6 +1,7 @@
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createDeepSeek } from "@ai-sdk/deepseek";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { createGroq } from "@ai-sdk/groq";
 import { createOpenAI } from "@ai-sdk/openai";
 import { createXai } from "@ai-sdk/xai";
 import { generateText } from "ai";
@@ -16,6 +17,7 @@ export const SUPPORTED_PROVIDERS = {
   google: { envKey: "GOOGLE_GENERATIVE_AI_API_KEY", name: "Google" },
   xai: { envKey: "XAI_API_KEY", name: "xAI (Grok)" },
   deepseek: { envKey: "DEEPSEEK_API_KEY", name: "DeepSeek" },
+  groq: { envKey: "GROQ_API_KEY", name: "Groq" },
 } as const;
 
 export type SupportedProvider = keyof typeof SUPPORTED_PROVIDERS;
@@ -29,6 +31,7 @@ export const PROVIDER_MODELS: Record<SupportedProvider, string[]> = {
   google: ["gemini-2.5-pro", "gemini-2.5-flash", "gemini-2.0-flash", "gemini-3-pro-preview"],
   xai: ["grok-4", "grok-3", "grok-4-fast-reasoning"],
   deepseek: ["deepseek-chat", "deepseek-reasoner"],
+  groq: ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"],
 };
 
 export interface AISDKConfig {
@@ -45,12 +48,13 @@ type ProviderFactory =
   | ReturnType<typeof createAnthropic>
   | ReturnType<typeof createGoogleGenerativeAI>
   | ReturnType<typeof createXai>
-  | ReturnType<typeof createDeepSeek>;
+  | ReturnType<typeof createDeepSeek>
+  | ReturnType<typeof createGroq>;
 
 /**
  * AI SDK Provider - Supports multiple AI providers via Vercel AI SDK
  *
- * Supports 5 providers: OpenAI, Anthropic, Google, xAI, DeepSeek
+ * Supports 6 providers: OpenAI, Anthropic, Google, xAI, DeepSeek, Groq
  * Model format: "provider/model" (e.g., "openai/gpt-4o", "xai/grok-4")
  */
 export class AISDKProvider implements LLMProvider {
@@ -80,6 +84,9 @@ export class AISDKProvider implements LLMProvider {
     }
     if (config.apiKeys.deepseek) {
       this.providers.deepseek = createDeepSeek({ apiKey: config.apiKeys.deepseek });
+    }
+    if (config.apiKeys.groq) {
+      this.providers.groq = createGroq({ apiKey: config.apiKeys.groq });
     }
 
     if (Object.keys(this.providers).length === 0) {
@@ -145,6 +152,7 @@ export interface LegacyAISDKConfig {
   model: string;
   openaiApiKey?: string;
   anthropicApiKey?: string;
+  groqApiKey?: string;
 }
 
 export function createAISDKProvider(config: AISDKConfig | LegacyAISDKConfig): AISDKProvider {

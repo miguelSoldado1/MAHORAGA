@@ -1295,6 +1295,9 @@ export class MahoragaHarness extends DurableObject<Env> {
     const pricing: Record<string, { input: number; output: number }> = {
       "gpt-4o": { input: 2.5, output: 10 },
       "gpt-4o-mini": { input: 0.15, output: 0.6 },
+      "groq/llama-3.1-8b-instant": { input: 0, output: 0 },
+      "groq/llama-3.3-70b-versatile": { input: 0, output: 0 },
+      "groq/openai/gpt-oss-20b": { input: 0, output: 0 },
     };
     const rates = pricing[model] ?? pricing["gpt-4o"]!;
     const cost = (tokensIn * rates.input + tokensOut * rates.output) / 1_000_000;

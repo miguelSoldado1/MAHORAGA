@@ -14,6 +14,7 @@ export interface Env {
   GOOGLE_GENERATIVE_AI_API_KEY?: string;
   XAI_API_KEY?: string;
   DEEPSEEK_API_KEY?: string;
+  GROQ_API_KEY?: string;
   CLOUDFLARE_AI_GATEWAY_ACCOUNT_ID?: string;
   CLOUDFLARE_AI_GATEWAY_ID?: string;
   CLOUDFLARE_AI_GATEWAY_TOKEN?: string;
